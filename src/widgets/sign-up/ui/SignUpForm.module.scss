@@ -1,0 +1,119 @@
+.page {
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    padding: 3rem;
+    background: var(--color-light-5);
+}
+
+.card {
+    width: 30rem;
+    padding: 3rem;
+    border: 1px solid var(--color-light-10);
+    border-radius: 1.25rem;
+    background: var(--color-light);
+    box-shadow: 0 1.25rem 3.5rem rgb(45 45 45 / 9%);
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.eyebrow {
+    margin: 0 0 0.5rem 0;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.title {
+    margin: 0;
+    color: var(--color-dark);
+    font-size: 2.5rem;
+    line-height: 1.1;
+}
+
+.description {
+    margin: 0.75rem 0 0 0;
+    color: var(--color-gray);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.form {
+    display: grid;
+    gap: 1.2rem;
+    color: var(--color-dark);
+
+    > label {
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+
+        > input:not([type="checkbox"]) {
+            width: 100%;
+            min-height: 3rem;
+            padding: 0.75rem 0.9rem;
+            border: 1px solid var(--color-light-10);
+            border-radius: 0.5rem;
+            outline: none;
+            background: #fff;
+            color: var(--color-dark);
+            font: inherit;
+            font-weight: 400;
+
+            &:hover {
+                border-color: var(--color-light-20);
+            }
+
+            &:focus-visible {
+                border-color: var(--color-accent);
+                box-shadow: 0 0 0 3px rgb(186 55 55 / 14%);
+            }
+        }
+
+        &:has(input[type="checkbox"]) {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--color-gray);
+            font-size: 0.9rem;
+            font-weight: 400;
+
+            input {
+                width: 1rem;
+                height: 1rem;
+                accent-color: var(--color-accent);
+            }
+        }
+    }
+}
+
+.submit {
+    min-height: 3.25rem;
+    margin-top: 0.25rem;
+    padding: 0.75rem 1.25rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--color-accent);
+    color: var(--color-light);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    transition: var(--transition-duration);
+
+    &:hover {
+        background: var(--color-accent-10);
+    }
+
+    &:active {
+        transform: translateY(1px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid rgb(186 55 55 / 30%);
+        outline-offset: 3px;
+    }
+}
