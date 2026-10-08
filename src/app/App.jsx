@@ -1,5 +1,7 @@
+import { SignUpPage } from "../pages/sign-up";
+
 function App() {
-  return null
+    return <SignUpPage />;
 }
 
-export default App
+export default App;
