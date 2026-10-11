@@ -116,4 +116,9 @@
         outline: 3px solid rgb(186 55 55 / 30%);
         outline-offset: 3px;
     }
+
+    &:disabled {
+        cursor: not-allowed;
+        background: var(--color-accent-10);
+    }
 }
