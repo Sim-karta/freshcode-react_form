@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useState } from "react";
 import { Field } from "../../../shared/ui/field";
 import styles from "./SignUpForm.module.scss";
@@ -10,26 +11,103 @@ const initialFormState = {
     agreeToRules: false,
 };
 
+const PASSWORD_PATTERN =
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*.]).{8,20}$/;
+const EMAIL_PATTERN = /^.+@.+$/;
+
+const validateField = (name, value, formData = {}) => {
+    switch (name) {
+        case "name":
+            if (!value.trim()) return "Name is required";
+            if (value.trim().length < 2)
+                return "Name must contain at least 2 characters";
+            return "";
+        case "email":
+            if (!value.trim()) return "Email is required";
+            if (!EMAIL_PATTERN.test(value)) return "Enter a valid email";
+            return "";
+        case "password":
+            if (!value) return "Password is required";
+            if (!PASSWORD_PATTERN.test(value)) {
+                return "Password must contain at least 8 characters, a letter and a number";
+            }
+            return "";
+        case "passwordConfirmation":
+            if (!value) return "Confirm your password";
+            if (!PASSWORD_PATTERN.test(value)) {
+                return "Password confirmation must match the password requirements";
+            }
+            if (value !== formData.password) return "Passwords do not match";
+            return "";
+        case "agreeToRules":
+            return value ? "" : "You must accept the rules";
+        default:
+            return "";
+    }
+};
+
 function SignUpForm() {
     const [formData, setFormData] = useState(initialFormState);
+    const [touched, setTouched] = useState({});
+
+    const errors = {
+        name: validateField("name", formData.name),
+        email: validateField("email", formData.email),
+        password: validateField("password", formData.password),
+        passwordConfirmation: validateField(
+            "passwordConfirmation",
+            formData.passwordConfirmation,
+            formData,
+        ),
+        agreeToRules: validateField("agreeToRules", formData.agreeToRules),
+    };
+
+    const isFormValid = Object.values(errors).every((error) => !error);
 
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
 
-        setFormData((prevState) => ({
-            ...prevState,
+        setFormData((prev) => ({
+            ...prev,
             [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+    const handleBlur = (event) => {
+        setTouched((prev) => ({
+            ...prev,
+            [event.target.name]: true,
         }));
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (!formData.agreeToRules) {
+        if (!isFormValid) {
+            setTouched({
+                name: true,
+                email: true,
+                password: true,
+                passwordConfirmation: true,
+                agreeToRules: true,
+            });
             return;
         }
 
         console.log(formData);
+    };
+
+    const getFieldClassName = (name) => {
+        if (!touched[name]) return "";
+
+        return classNames({
+            [styles.invalid]: errors[name],
+            [styles.valid]:
+                !errors[name] &&
+                (name === "agreeToRules"
+                    ? formData.agreeToRules
+                    : formData[name]),
+        });
     };
 
     return (
@@ -45,7 +123,11 @@ function SignUpForm() {
                     </p>
                 </header>
 
-                <form className={styles.form} onSubmit={handleSubmit}>
+                <form
+                    className={styles.form}
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
                     <Field
                         id="name"
                         label="Name"
@@ -53,6 +135,8 @@ function SignUpForm() {
                         type="text"
                         value={formData.name}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getFieldClassName("name")}
                     />
                     <Field
                         id="email"
@@ -61,6 +145,8 @@ function SignUpForm() {
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getFieldClassName("email")}
                     />
                     <Field
                         id="password"
@@ -69,6 +155,8 @@ function SignUpForm() {
                         type="password"
                         value={formData.password}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getFieldClassName("password")}
                     />
                     <Field
                         id="passwordConfirmation"
@@ -77,6 +165,8 @@ function SignUpForm() {
                         type="password"
                         value={formData.passwordConfirmation}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getFieldClassName("passwordConfirmation")}
                     />
                     <Field
                         id="agreeToRules"
@@ -85,11 +175,13 @@ function SignUpForm() {
                         type="checkbox"
                         checked={formData.agreeToRules}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getFieldClassName("agreeToRules")}
                     />
                     <button
                         className={styles.submit}
                         type="submit"
-                        disabled={!formData.agreeToRules}
+                        disabled={!isFormValid || !formData.agreeToRules}
                     >
                         SignUp
                     </button>
