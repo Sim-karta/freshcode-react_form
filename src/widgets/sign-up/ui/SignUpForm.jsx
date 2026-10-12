@@ -137,6 +137,7 @@ function SignUpForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={getFieldClassName("name")}
+                        error={touched.name ? errors.name : ""}
                     />
                     <Field
                         id="email"
@@ -147,6 +148,7 @@ function SignUpForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={getFieldClassName("email")}
+                        error={touched.email ? errors.email : ""}
                     />
                     <Field
                         id="password"
@@ -157,6 +159,7 @@ function SignUpForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={getFieldClassName("password")}
+                        error={touched.password ? errors.password : ""}
                     />
                     <Field
                         id="passwordConfirmation"
@@ -167,6 +170,11 @@ function SignUpForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={getFieldClassName("passwordConfirmation")}
+                        error={
+                            touched.passwordConfirmation
+                                ? errors.passwordConfirmation
+                                : ""
+                        }
                     />
                     <Field
                         id="agreeToRules"
@@ -177,6 +185,9 @@ function SignUpForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={getFieldClassName("agreeToRules")}
+                        error={
+                            touched.agreeToRules ? errors.agreeToRules : ""
+                        }
                     />
                     <button
                         className={styles.submit}
